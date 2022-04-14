@@ -88,7 +88,7 @@ void setNeighbours(vector<Cell> &Grid, int size) {
 }
 
 int main() {
-    RenderWindow mainWindow(VideoMode(600, 800), "Ruby Maze Thing", Style::Close);
+    RenderWindow mainWindow(VideoMode(800, 800), "Ruby Maze Thing", Style::Close);
 
     PlayerStates state = selectTiles;  // Default
 
@@ -111,7 +111,7 @@ int main() {
         yPos += cellSize + padding;
     }
 
-    int noButtons = 5;
+    int noButtons = 6;
     vector<Button> Buttons(noButtons);
 
     Font font;
@@ -134,16 +134,25 @@ int main() {
         buttonText[i].setFillColor(Color::White);
     }
     // Positioning Buttons
-    Buttons[0].setPosition(Vector2f(50, 690));
-    Buttons[1].setPosition(Vector2f(300, 690));
-    Buttons[2].setPosition(Vector2f(50, 0));
+    Buttons[0].setPosition(Vector2f(606, 249));
+    Buttons[1].setPosition(Vector2f(606, 419));
+    Buttons[2].setPosition(Vector2f(606, 369));
+    Buttons[3].setPosition(Vector2f(606, 129));
+    Buttons[4].setPosition(Vector2f(606, 189));
+    Buttons[5].setPosition(Vector2f(606, 309));
     // Positioning Text
-    buttonText[0].setPosition(Vector2f(50, 690));
-    buttonText[1].setPosition(Vector2f(300, 690));
-    buttonText[2].setPosition(Vector2f(50, 0));
-    buttonText[0].setString("set neighbours");
+    buttonText[0].setPosition(Vector2f(606, 249));
+    buttonText[1].setPosition(Vector2f(606, 419));
+    buttonText[2].setPosition(Vector2f(606, 369));
+    buttonText[3].setPosition(Vector2f(606, 129));
+    buttonText[4].setPosition(Vector2f(606, 189));
+    buttonText[5].setPosition(Vector2f(606, 309));
+    buttonText[0].setString("Set Neighbours");
     buttonText[1].setString("reset");
     buttonText[2].setString("Output");
+    buttonText[3].setString("Set Start");
+    buttonText[4].setString("Set End");
+    buttonText[5].setString("Find Path");
 
     Event gameEvent;
     while (mainWindow.isOpen()) {
@@ -176,6 +185,7 @@ int main() {
                     state = selectTiles;
                 }
             }
+
             // Checks if button clicks a button
             if (Buttons[1].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
                 for (int i = 0; i < size * size; i++) {
