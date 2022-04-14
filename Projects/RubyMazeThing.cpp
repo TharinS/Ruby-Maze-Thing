@@ -83,13 +83,14 @@ void setNeighbours(vector<Cell> &Grid, int size) {
                     Grid[i].west = true;
                 }
             }
+
+            Grid[i].setFillColor(Color(153, 50, 204));  // darkorchid
         }
     }
 }
 
 int main() {
     RenderWindow mainWindow(VideoMode(800, 800), "Ruby Maze Thing", Style::Close);
-
     PlayerStates state = selectTiles;  // Default
 
     // Grid Generation
@@ -187,17 +188,29 @@ int main() {
             }
 
             // Checks if button clicks a button
+            if (Buttons[0].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
+                for (int i = 0; i < size * size; i++) {
+                    Grid[i].Reset();
+                }
+                setNeighbours(Grid, size);
+            }
+            // Checks if button clicks a button
             if (Buttons[1].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
                 for (int i = 0; i < size * size; i++) {
                     Grid[i].Reset();
                 }
             }
             // Checks if button clicks a button
-            if (Buttons[0].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
-                setNeighbours(Grid, size);
-            }
-            // Checks if button clicks a button
             if (Buttons[2].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
+                printGridDetails(Grid, size);
+            }
+            if (Buttons[3].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
+                printGridDetails(Grid, size);
+            }
+            if (Buttons[4].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
+                printGridDetails(Grid, size);
+            }
+            if (Buttons[5].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
                 printGridDetails(Grid, size);
             }
         }
