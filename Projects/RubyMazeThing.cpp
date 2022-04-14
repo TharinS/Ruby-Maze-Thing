@@ -7,7 +7,15 @@ using namespace sf;
 using namespace std;
 
 class Cell : public RectangleShape {
+   private:
+    enum CellState {
+        Path,   // 0
+        Start,  // 1
+        End     // 2
+    };
+
    public:
+    CellState cellState = Path;
     bool north = false;
     bool east = false;
     bool west = false;
@@ -23,6 +31,10 @@ class Cell : public RectangleShape {
         this->south = false;
         this->visited = false;
     }
+
+    void setStatePath() { this->cellState = Path; }
+    void setStateStart() { this->cellState = Start; }
+    void setStateEnd() { this->cellState = End; }
 };
 
 class Button : public RectangleShape {
@@ -87,6 +99,9 @@ void setNeighbours(vector<Cell> &Grid, int size) {
             Grid[i].setFillColor(Color(153, 50, 204));  // darkorchid
         }
     }
+}
+
+void findPath(vector<Cell> &Grid, int size) {
 }
 
 int main() {
@@ -173,14 +188,14 @@ int main() {
                         Grid[i].setFillColor(Color(255, 165, 0, 255));  // Orange
                     }
                 } else if (state == selectStart) {
-                    if ((Grid[i].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) && !Grid[i].visited) {
-                        Grid[i].visited = true;
+                    if ((Grid[i].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) && Grid[i].visited) {
+                        Grid[i].setStateStart();
                         Grid[i].setFillColor(Color(0, 0, 255, 255));  // Blue for Start
                     }
                     state = selectEnd;
                 } else if (state == selectEnd) {
-                    if ((Grid[i].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) && !Grid[i].visited) {
-                        Grid[i].visited = true;
+                    if ((Grid[i].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) && Grid[i].visited) {
+                        Grid[i].setStateEnd();
                         Grid[i].setFillColor(Color(255, 0, 0, 255));  // Red for End
                     }
                     state = selectTiles;
@@ -190,7 +205,10 @@ int main() {
             // Checks if button clicks a button
             if (Buttons[0].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
                 for (int i = 0; i < size * size; i++) {
-                    Grid[i].Reset();
+                    if (!Grid[i].visited) {
+                        Grid[i].Reset();
+                        Grid[i].setStatePath();
+                    }
                 }
                 setNeighbours(Grid, size);
             }
@@ -198,6 +216,7 @@ int main() {
             if (Buttons[1].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
                 for (int i = 0; i < size * size; i++) {
                     Grid[i].Reset();
+                    Grid[i].setStatePath();
                 }
             }
             // Checks if button clicks a button
@@ -205,13 +224,13 @@ int main() {
                 printGridDetails(Grid, size);
             }
             if (Buttons[3].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
-                printGridDetails(Grid, size);
+                state = selectStart;
             }
             if (Buttons[4].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
-                printGridDetails(Grid, size);
+                state = selectEnd;
             }
             if (Buttons[5].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) {
-                printGridDetails(Grid, size);
+                findPath(Grid, size);
             }
         }
 
