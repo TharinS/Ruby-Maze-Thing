@@ -115,7 +115,7 @@ int main() {
     vector<Button> Buttons(noButtons);
 
     Font font;
-    if (!font.loadFromFile("Projects\\Fonts\\PlayfairDisplay-Regular.ttf")) {
+    if (!font.loadFromFile("Projects\\Fonts\\PlayfairDisplay-Bold.ttf")) {
         cout << "Font Failed to load" << endl;
     }
 
