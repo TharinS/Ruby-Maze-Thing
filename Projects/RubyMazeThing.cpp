@@ -29,6 +29,13 @@ class Button : public RectangleShape {
    public:
 };
 
+// Enumeration of the states that specifies player action with the left mouse button
+enum PlayerStates {
+    selectTiles,
+    selectStart,
+    selectEnd
+};
+
 void printGridDetails(vector<Cell> Grid, int Size) {
     for (int i = 0; i < Size * Size; i++) {
         int x = i % Size;
@@ -83,6 +90,8 @@ void setNeighbours(vector<Cell> &Grid, int size) {
 int main() {
     RenderWindow mainWindow(VideoMode(600, 800), "Ruby Maze Thing", Style::Close);
 
+    PlayerStates state = selectTiles;  // Default
+
     // Grid Generation
     int xPos = 45;
     int yPos = 100;
@@ -102,7 +111,7 @@ int main() {
         yPos += cellSize + padding;
     }
 
-    int noButtons = 3;
+    int noButtons = 5;
     vector<Button> Buttons(noButtons);
 
     Font font;
@@ -148,9 +157,23 @@ int main() {
         if (Mouse::isButtonPressed(Mouse::Left)) {
             // Checks if button clicks grid
             for (int i = 0; i < size * size; i++) {
-                if ((Grid[i].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) && !Grid[i].visited) {
-                    Grid[i].visited = true;
-                    Grid[i].setFillColor(Color(255, 165, 0, 255));  // Orange
+                if (state == selectTiles) {
+                    if ((Grid[i].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) && !Grid[i].visited) {
+                        Grid[i].visited = true;
+                        Grid[i].setFillColor(Color(255, 165, 0, 255));  // Orange
+                    }
+                } else if (state == selectStart) {
+                    if ((Grid[i].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) && !Grid[i].visited) {
+                        Grid[i].visited = true;
+                        Grid[i].setFillColor(Color(0, 0, 255, 255));  // Blue for Start
+                    }
+                    state = selectEnd;
+                } else if (state == selectEnd) {
+                    if ((Grid[i].getGlobalBounds().contains(Vector2f(Mouse::getPosition(mainWindow).x, Mouse::getPosition(mainWindow).y))) && !Grid[i].visited) {
+                        Grid[i].visited = true;
+                        Grid[i].setFillColor(Color(255, 0, 0, 255));  // Red for End
+                    }
+                    state = selectTiles;
                 }
             }
             // Checks if button clicks a button
